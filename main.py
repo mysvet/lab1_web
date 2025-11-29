@@ -65,4 +65,7 @@ def index():
                            processed=processed, hist_orig=hist_orig, hist_proc=hist_proc)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Получаем порт из Render (по умолчанию 10000)
+    port = int(os.environ.get('PORT', 5000))
+    # ВАЖНО: host='0.0.0.0', а не '127.0.0.1'!
+    app.run(host='0.0.0.0', port=port, debug=False)
