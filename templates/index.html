@@ -1,0 +1,37 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Крест на изображении{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Наложение креста</h2>
+  <form method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      <label>Изображение:</label>
+      <input type="file" name="image" class="form-control" required>
+    </div>
+    {{ wtf.form_field(form.orientation) }}
+    <div class="row">
+      {{ wtf.form_field(form.color_r, class="col") }}
+      {{ wtf.form_field(form.color_g, class="col") }}
+      {{ wtf.form_field(form.color_b, class="col") }}
+    </div>
+    {{ wtf.form_field(form.recaptcha) }}
+    {{ wtf.form_field(form.submit, class="btn btn-primary") }}
+  </form>
+
+  {% if original %}
+  <h3 class="mt-4">Результат:</h3>
+  <div class="row mb-3">
+    <div class="col"><img src="{{ url_for('static', filename=original) }}" class="img-fluid"></div>
+    <div class="col"><img src="{{ url_for('static', filename=processed) }}" class="img-fluid"></div>
+  </div>
+  <div class="row">
+    <div class="col"><img src="{{ url_for('static', filename=hist_orig + '.png') }}" class="img-fluid"></div>
+    <div class="col"><img src="{{ url_for('static', filename=hist_proc + '.png') }}" class="img-fluid"></div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

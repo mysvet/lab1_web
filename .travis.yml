@@ -1,5 +1,9 @@
 language: python
+python:
+  - "3.9"
 install:
- - pip3 install flask
+  - pip install -r requirements.txt
+before_script:
+  - mkdir -p static/uploaded
 script:
- - python3 ./flaskapp/some_app.py
+  - python -c "from app import app; print('OK')"
