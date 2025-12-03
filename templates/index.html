@@ -1,37 +1,64 @@
+{# Наследование от базового шаблона Bootstrap — обеспечивает базовую HTML-структуру и подключение стилей/скриптов #}
 {% extends "bootstrap/base.html" %}
+
+{# Импорт макросов из WTForms для удобной отрисовки полей формы с поддержкой Bootstrap #}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{# Заголовок страницы, отображаемый во вкладке браузера #}
 {% block title %}Крест на изображении{% endblock %}
 
+{# Основное содержимое страницы #}
 {% block content %}
 <div class="container mt-4">
+  {# Заголовок раздела формы #}
   <h2>Наложение креста</h2>
+
+  {# Форма для загрузки изображения и настройки параметров креста.
+       method="post" — данные отправляются на сервер методом POST.
+       enctype="multipart/form-data" — необходимо для корректной передачи файлов. #}
   <form method="post" enctype="multipart/form-data">
+
+    {# Скрытые поля формы #}
     {{ form.hidden_tag() }}
+
+    {# Поле для выбора изображения с помощью стандартного файлового input #}
     <div class="mb-3">
       <label>Изображение:</label>
       <input type="file" name="image" class="form-control" required>
     </div>
+
+    {# Поле выбора ориентации креста (вертикальный/горизонтальный) #}
     {{ wtf.form_field(form.orientation) }}
+
+    {# Три поля для ввода компонент цвета креста: красная, зелёная и синяя (RGB) #}
     <div class="row">
       {{ wtf.form_field(form.color_r, class="col") }}
       {{ wtf.form_field(form.color_g, class="col") }}
       {{ wtf.form_field(form.color_b, class="col") }}
     </div>
+
+    {# Поле reCAPTCHA для защиты от ботов #}
     {{ wtf.form_field(form.recaptcha) }}
+
+    {# Кнопка отправки формы, стилизованная как основная кнопка Bootstrap #}
     {{ wtf.form_field(form.submit, class="btn btn-primary") }}
   </form>
 
+  {# Условный блок: отображается только если переменная `original` передана из представления (view) #}
   {% if original %}
-  <h3 class="mt-4">Результат:</h3>
-  <div class="row mb-3">
-    <div class="col"><img src="{{ url_for('static', filename=original) }}" class="img-fluid"></div>
-    <div class="col"><img src="{{ url_for('static', filename=processed) }}" class="img-fluid"></div>
-  </div>
-  <div class="row">
-    <div class="col"><img src="{{ url_for('static', filename=hist_orig + '.png') }}" class="img-fluid"></div>
-    <div class="col"><img src="{{ url_for('static', filename=hist_proc + '.png') }}" class="img-fluid"></div>
-  </div>
+    <h3 class="mt-4">Результат:</h3>
+
+    {# Сравнение исходного и обработанного изображений в двух колонках #}
+    <div class="row mb-3">
+      <div class="col"><img src="{{ url_for('static', filename=original) }}" class="img-fluid"></div>
+      <div class="col"><img src="{{ url_for('static', filename=processed) }}" class="img-fluid"></div>
+    </div>
+
+    {# Сравнение гистограмм цветов исходного и обработанного изображений #}
+    <div class="row">
+      <div class="col"><img src="{{ url_for('static', filename=hist_orig + '.png') }}" class="img-fluid"></div>
+      <div class="col"><img src="{{ url_for('static', filename=hist_proc + '.png') }}" class="img-fluid"></div>
+    </div>
   {% endif %}
 </div>
 {% endblock %}

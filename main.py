@@ -6,24 +6,24 @@ from wtforms.validators import DataRequired  # Валидатор для обя�
 from werkzeug.utils import secure_filename  # Защита от опасных имён файлов
 import os
 
-# Утилиты для обработки изображений (предполагаются реализованными в файле utils.py)
+# Утилиты для обработки изображений
 from utils import draw_cross, plot_histograms
 
 # Создаём экземпляр Flask-приложения
 app = Flask(__name__)
 
-# Секретный ключ для защиты CSRF-токенов и сессий
+# Секретный ключ для защиты
 app.config['SECRET_KEY'] = 'your-super-secret-key'
 
 # Ключи reCAPTCHA (Google reCAPTCHA v2) для защиты от ботов
 app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcitBssAAAAACF5YxswyTkubRaRMyUjfE296Dy5'
 app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcitBssAAAAAKStyJEGMpGRU7tJqp-EXiS5rTGM'
 
-# Подключаем Bootstrap для стилизации через Flask-Bootstrap
+# Подключаем Bootstrap
 from flask_bootstrap import Bootstrap
 bootstrap = Bootstrap(app)
 
-# Папка для загрузки пользовательских изображений
+# Папка для загрузки изображений
 UPLOAD_FOLDER = 'static/uploaded'
 # Создаём папку, если её ещё нет
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -109,9 +109,9 @@ def index():
                            processed=processed, hist_orig=hist_orig, hist_proc=hist_proc)
 
 
-# Точка входа при запуске напрямую (например, локально)
+# Точка входа при запуске напрямую
 if __name__ == '__main__':
-    # Получаем порт из переменной окружения (важно для хостингов типа Render)
+    # Получаем порт из переменной окружения
     port = int(os.environ.get('PORT', 5000))
     # Запускаем сервер: host='0.0.0.0' — чтобы приложение было доступно извне
     app.run(host='0.0.0.0', port=port, debug=False)
